@@ -4,34 +4,34 @@ public static class Task2
 {
     public static void Run()
     {
-        Console.Write("Введіть базову вартість послуги (грн): ");
+        Console.Write("Введіть ціну одного прийому (грн): ");
 
         if (!double.TryParse(Console.ReadLine(), out double price) || price < 0)
         {
-            Console.WriteLine("Помилка: вартість повинна бути невід'ємним числом.");
+            Console.WriteLine("Помилка: введіть коректну ціну.");
             return;
         }
 
-        Console.Write("Чи є у вас страховка або дисконтна картка? (yes/no): ");
+        Console.Write("Введіть кількість прийомів: ");
 
-        string answer = Console.ReadLine()?.Trim().ToLower() ?? "";
-
-        if (answer is not ("yes" or "no"))
+        if (!int.TryParse(Console.ReadLine(), out int count) || count < 0)
         {
-            Console.WriteLine("Помилка: введіть 'yes' або 'no'.");
+            Console.WriteLine("Помилка: введіть коректну кількість.");
             return;
         }
 
-        double discount = answer switch
+        Console.Write("Введіть знижку (%): ");
+
+        if (!int.TryParse(Console.ReadLine(), out int discount) ||
+            discount < 0 || discount > 100)
         {
-            "yes" => 0.15,
-            _ => 0.0
-        };
+            Console.WriteLine("Помилка: введіть коректну знижку від 0 до 100.");
+            return;
+        }
 
-        double finalPrice = price * (1 - discount);
+        double total =
+            price * count * (1 - discount / 100.0);
 
-        Console.WriteLine($"Базова ціна: {price:F2} грн");
-        Console.WriteLine($"Знижка: {discount:P0}");
-        Console.WriteLine($"Фінальна вартість до сплати: {finalPrice:F2} грн");
+        Console.WriteLine($"Сума: {total:F2} грн");
     }
 }
