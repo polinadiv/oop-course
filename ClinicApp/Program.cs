@@ -463,7 +463,7 @@ internal class Program
         Console.WriteLine(appointment1);
         Console.WriteLine(appointment2);
     }
-}*/
+}
 namespace ClinicApp;
 
 internal class Program
@@ -573,5 +573,93 @@ internal class Program
 
         appointmentManager.DisplayList(
             appointmentManager.GetByPatient(2));
+    }
+}*/
+namespace ClinicApp;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Clinic clinic = new Clinic();
+
+        clinic.Patients.Add(
+            new Patient(
+                "Іван",
+                "Петренко",
+                new DateTime(1985, 5, 10),
+                "A(II)",
+                "0501111111"));
+
+        clinic.Patients.Add(
+            new Patient(
+                "Олена",
+                "Коваль",
+                new DateTime(1992, 8, 15),
+                "B(III)",
+                "0502222222"));
+
+        clinic.Patients.Add(
+            new Patient(
+                "Максим",
+                "Бойко",
+                new DateTime(2010, 3, 12),
+                "O(I)",
+                "0503333333"));
+
+        clinic.Patients.Add(
+            new Patient(
+                "Марія",
+                "Ткач",
+                new DateTime(1999, 11, 20),
+                "AB(IV)",
+                "0504444444"));
+
+        Doctor doctor1 = new Doctor(
+            "Олег",
+            "Сидоренко",
+            "Кардіологія",
+            "LIC-001",
+            "+380501111111");
+
+        Doctor doctor2 = new Doctor(
+            "Наталія",
+            "Мороз",
+            "Неврологія",
+            "LIC-002",
+            "+380502222222");
+
+        Doctor doctor3 = new Doctor(
+            "Андрій",
+            "Власенко",
+            "Педіатрія",
+            "LIC-003",
+            "+380503333333");
+
+        clinic.Doctors.Add(doctor1);
+        clinic.Doctors.Add(doctor2);
+        clinic.Doctors.Add(doctor3);
+
+        clinic.Appointments.Book(
+            1,
+            1,
+            new DateTime(2027, 5, 9, 10, 0, 0));
+
+        clinic.Appointments.Book(
+            2,
+            2,
+            new DateTime(2027, 5, 9, 11, 0, 0),
+            45);
+
+        clinic.Appointments.Book(
+            3,
+            3,
+            new DateTime(2027, 5, 10, 9, 0, 0),
+            20);
+
+        clinic.PrintSchedule(
+            new DateTime(2027, 5, 9));
+
+        clinic.GenerateReport();
     }
 }
