@@ -270,7 +270,7 @@ internal class Program
             Console.WriteLine("Пацієнта не знайдено.");
         }
     }
-}*/
+}
 namespace ClinicApp;
 
 internal class Program
@@ -422,5 +422,45 @@ internal class Program
         {
             Console.WriteLine("Лікаря не знайдено.");
         }
+    }
+}*/
+namespace ClinicApp;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Appointment appointment1 =
+            new Appointment(
+                1,
+                1,
+                new DateTime(2026, 5, 9, 10, 0, 0));
+
+        Appointment appointment2 =
+            new Appointment(
+                2,
+                2,
+                new DateTime(2026, 5, 9, 11, 0, 0),
+                45);
+
+        Appointment appointment3 =
+            new Appointment(
+                3,
+                3,
+                new DateTime(2026, 5, 10, 9, 0, 0),
+                20);
+
+        Console.WriteLine(appointment1);
+        Console.WriteLine(appointment2);
+        Console.WriteLine(appointment3);
+
+        Console.WriteLine();
+        Console.WriteLine("// Після Cancel та Complete:");
+
+        appointment1.Cancel("Пацієнт не зміг прийти");
+        appointment2.Complete();
+
+        Console.WriteLine(appointment1);
+        Console.WriteLine(appointment2);
     }
 }
