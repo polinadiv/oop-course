@@ -574,7 +574,7 @@ internal class Program
         appointmentManager.DisplayList(
             appointmentManager.GetByPatient(2));
     }
-}*/
+}
 namespace ClinicApp;
 
 internal class Program
@@ -661,5 +661,75 @@ internal class Program
             new DateTime(2027, 5, 9));
 
         clinic.GenerateReport();
+    }
+}*/
+namespace ClinicApp;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        GrowablePatientManager manager =
+            new GrowablePatientManager();
+
+        Console.WriteLine(
+            "=== Тест GrowablePatientManager ===");
+
+        Console.WriteLine(
+            "Додаємо пацієнтів одного за одним...");
+
+        for (int i = 1; i <= 20; i++)
+        {
+            Patient patient =
+                new Patient(
+                    "Тест",
+                    "Пацієнт" + i,
+                    new DateTime(2000, 1, 1),
+                    "A(II)",
+                    "0500000000");
+
+            manager.Add(patient);
+
+            Console.WriteLine(
+                "  Додано [" +
+                patient.Id +
+                "]. Розмір: " +
+                manager.Count +
+                " / " +
+                manager.Capacity);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Тест пошуку:");
+
+        Patient? found =
+            manager.FindById(10);
+
+        if (found != null)
+        {
+            Console.WriteLine(
+                "  FindById(10) → " +
+                found.FullName);
+        }
+
+        Patient? missing =
+            manager.FindById(99);
+
+        if (missing == null)
+        {
+            Console.WriteLine(
+                "  FindById(99) → не знайдено");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Порівняння:");
+
+        Console.WriteLine(
+            "  PatientManager:         100 місць (фіксовано)");
+
+        Console.WriteLine(
+            "  GrowablePatientManager:  " +
+            manager.Capacity +
+            " місця (зросте при потребі)");
     }
 }
