@@ -2,14 +2,16 @@
 
 public class Clinic
 {
+    public string Name { get; set; }
     public PatientManager Patients { get; }
 
     public DoctorManager Doctors { get; }
 
     public AppointmentManager Appointments { get; }
 
-    public Clinic()
+    public Clinic(string name)
     {
+        Name = name;
         Patients = new PatientManager();
         Doctors = new DoctorManager();
         Appointments =
