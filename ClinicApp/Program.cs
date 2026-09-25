@@ -423,7 +423,7 @@ internal class Program
             Console.WriteLine("Лікаря не знайдено.");
         }
     }
-}*/
+}
 namespace ClinicApp;
 
 internal class Program
@@ -462,5 +462,116 @@ internal class Program
 
         Console.WriteLine(appointment1);
         Console.WriteLine(appointment2);
+    }
+}*/
+namespace ClinicApp;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        PatientManager patientManager = new PatientManager();
+
+        patientManager.Add(new Patient(
+            "Іван",
+            "Петренко",
+            new DateTime(1985, 5, 10),
+            "A(II)",
+            "0501111111"));
+
+        patientManager.Add(new Patient(
+            "Олена",
+            "Коваль",
+            new DateTime(1992, 8, 15),
+            "B(III)",
+            "0502222222"));
+
+        patientManager.Add(new Patient(
+            "Максим",
+            "Бойко",
+            new DateTime(2010, 3, 12),
+            "O(I)",
+            "0503333333"));
+
+        DoctorManager doctorManager = new DoctorManager();
+
+        Doctor doctor1 = new Doctor(
+            "Олег",
+            "Сидоренко",
+            "Кардіологія",
+            "LIC-001",
+            "+380501111111");
+
+        Doctor doctor2 = new Doctor(
+            "Наталія",
+            "Мороз",
+            "Неврологія",
+            "LIC-002",
+            "+380502222222");
+
+        Doctor doctor3 = new Doctor(
+            "Андрій",
+            "Власенко",
+            "Педіатрія",
+            "LIC-003",
+            "+380503333333");
+
+        doctor2.WorkStartHour = 10;
+        doctor2.WorkEndHour = 19;
+
+        doctor3.WorkStartHour = 7;
+        doctor3.WorkEndHour = 15;
+
+        doctorManager.Add(doctor1);
+        doctorManager.Add(doctor2);
+        doctorManager.Add(doctor3);
+
+        AppointmentManager appointmentManager =
+            new AppointmentManager(
+                patientManager,
+                doctorManager);
+
+        appointmentManager.Book(
+            1,
+            1,
+            new DateTime(2027, 5, 9, 10, 0, 0));
+
+        appointmentManager.Book(
+            2,
+            2,
+            new DateTime(2027, 5, 9, 11, 0, 0),
+            45);
+
+        appointmentManager.Book(
+            3,
+            3,
+            new DateTime(2027, 5, 10, 9, 0, 0),
+            20);
+
+        appointmentManager.Book(
+            99,
+            1,
+            new DateTime(2027, 5, 9, 12, 0, 0));
+
+        Console.WriteLine();
+        Console.WriteLine("Майбутні записи:");
+
+        appointmentManager.DisplayList(
+            appointmentManager.GetUpcoming());
+
+        Console.WriteLine();
+
+        if (appointmentManager.Cancel(
+                1,
+                "Пацієнт не зміг прийти"))
+        {
+            Console.WriteLine("Запис [1] скасовано.");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("Записи пацієнта #2:");
+
+        appointmentManager.DisplayList(
+            appointmentManager.GetByPatient(2));
     }
 }
