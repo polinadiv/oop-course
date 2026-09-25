@@ -106,7 +106,7 @@ namespace ClinicApp
             Console.WriteLine();
         }
     }
-}*/
+}
 using System.Text;
 namespace ClinicApp;
 
@@ -268,6 +268,159 @@ internal class Program
         else
         {
             Console.WriteLine("Пацієнта не знайдено.");
+        }
+    }
+}*/
+namespace ClinicApp;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Console.InputEncoding = System.Text.Encoding.UTF8;
+        DoctorManager doctorManager = new DoctorManager();
+
+        doctorManager.Add(
+    new Doctor(
+        "Олег",
+        "Сидоренко",
+        "Кардіологія",
+        "LIC-001",
+        "+380501111111"));
+
+        doctorManager.Add(
+            new Doctor(
+                "Наталія",
+                "Мороз",
+                "Неврологія",
+                "LIC-002",
+                "+380502222222"));
+
+        doctorManager.Add(
+            new Doctor(
+                "Андрій",
+                "Власенко",
+                "Педіатрія",
+                "LIC-003",
+                "+380503333333"));
+
+        DoctorsMenu(doctorManager);
+    }
+
+    static void DoctorsMenu(DoctorManager manager)
+    {
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== Лікарі ===");
+            Console.WriteLine("1 - Показати всіх");
+            Console.WriteLine("2 - Додати");
+            Console.WriteLine("3 - Знайти за спеціальністю");
+            Console.WriteLine("4 - Видалити");
+            Console.WriteLine("5 - Статистика");
+            Console.WriteLine("0 - Вихід");
+            Console.Write("Ваш вибір: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    manager.DisplayAll();
+                    break;
+
+                case "2":
+                    AddDoctor(manager);
+                    break;
+
+                case "3":
+                    FindDoctor(manager);
+                    break;
+
+                case "4":
+                    RemoveDoctor(manager);
+                    break;
+
+                case "5":
+                    manager.DisplayStats();
+                    break;
+
+                case "0":
+                    return;
+
+                default:
+                    Console.WriteLine("Невірний вибір.");
+                    break;
+            }
+        }
+    }
+
+    static void AddDoctor(DoctorManager manager)
+    {
+        Console.Write("Ім'я: ");
+        string firstName = Console.ReadLine();
+
+        Console.Write("Прізвище: ");
+        string lastName = Console.ReadLine();
+
+        Console.Write("Спеціальність: ");
+        string speciality = Console.ReadLine();
+
+        Console.Write("Номер ліцензії: ");
+        string licenseNumber = Console.ReadLine();
+
+        Console.Write("Телефон: ");
+        string phone = Console.ReadLine();
+
+        Doctor doctor = new Doctor(
+            firstName,
+            lastName,
+            speciality,
+            licenseNumber,
+            phone);
+
+        manager.Add(doctor);
+    }
+
+    static void FindDoctor(DoctorManager manager)
+    {
+        Console.Write("Введіть спеціальність: ");
+        string speciality = Console.ReadLine();
+
+        Doctor[] doctors =
+            manager.FindBySpeciality(speciality);
+
+        Console.WriteLine();
+
+        if (doctors.Length == 0)
+        {
+            Console.WriteLine("Нічого не знайдено.");
+            return;
+        }
+
+        Console.WriteLine("Знайдено:");
+
+        for (int i = 0; i < doctors.Length; i++)
+        {
+            Console.WriteLine(doctors[i]);
+        }
+    }
+
+    static void RemoveDoctor(DoctorManager manager)
+    {
+        Console.Write("Введіть ID лікаря: ");
+        int id = int.Parse(Console.ReadLine());
+
+        bool removed = manager.Remove(id);
+
+        if (removed)
+        {
+            Console.WriteLine("Лікаря видалено.");
+        }
+        else
+        {
+            Console.WriteLine("Лікаря не знайдено.");
         }
     }
 }
