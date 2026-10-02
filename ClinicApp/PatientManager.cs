@@ -15,6 +15,20 @@ public class PatientManager
         }
     }
 
+    public Patient? this[int index]
+    {
+        get
+        {
+            if (index < 0 ||
+                index >= _count)
+            {
+                return null;
+            }
+
+            return _patients[index];
+        }
+    }
+
     public PatientManager()
     {
         _patients = new Patient[MaxPatients];

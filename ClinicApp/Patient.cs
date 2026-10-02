@@ -105,9 +105,14 @@ public class Patient
     {
         return "[" + Id + "] "
                + FullName
-               + " | Вік: " + Age
+               + " | Вік: "
+               + ClinicFormatter.FormatAge(Age)
                + " (" + GetAgeCategory() + ")"
-               + " | Кров: " + BloodType
-               + " | Тел: " + Phone;
+               + " | Кров: "
+               + ClinicFormatter.FormatBloodType(
+                   BloodType)
+               + " | Тел: "
+               + ClinicFormatter.FormatPhone(
+                   Phone);
     }
 }

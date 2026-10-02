@@ -103,9 +103,9 @@
 
             return "[" + Id + "] " +
                    FullName + " | " +
-                   Speciality + " | " +
+                   ClinicFormatter.FormatSpeciality(Speciality) + " | " +
                    LicenseNumber + " | " +
-                   "Тел: " + Phone + " | " +
+                   "Тел: " + ClinicFormatter.FormatPhone(Phone) + " | " +
                    WorkSchedule + " (" +
                    WorkingHoursPerDay + " год.) | " +
                    status;
