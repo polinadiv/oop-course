@@ -726,6 +726,58 @@ internal class Program
             3,
             new DateTime(2027, 5, 10, 9, 0, 0),
             20);
+        Doctor[] cardiologists =
+    clinic.Doctors.FindBySpeciality(
+        Speciality.Cardiology);
+
+        Console.WriteLine(
+            "Кардіологів: " +
+            cardiologists.Length);
+
+        Appointment[] appointments =
+            clinic.Appointments.GetByDate(
+                2027,
+                5,
+                9);
+
+        Console.WriteLine(
+            "Записів на дату: " +
+            appointments.Length);
+
+        if (clinic.Patients.TryFindById(
+                1,
+                out Patient patient))
+        {
+            Console.WriteLine(
+                "Знайдено пацієнта: " +
+                patient.FullName);
+        }
+
+        if (clinic.Doctors.TryFindById(
+                1,
+                out Doctor doctor))
+        {
+            Console.WriteLine(
+                "Знайдено лікаря: " +
+                doctor.FullName);
+        }
+
+        Patient[] bloodGroupPatients =
+            clinic.Patients.FindByBloodType(
+                BloodType.APositive);
+
+        Console.WriteLine(
+            "Пацієнтів з A+: " +
+            bloodGroupPatients.Length);
+
+        string patientName =
+            clinic.Patients
+                .FindById(99)
+                ?.FullName
+            ?? "невідомий";
+
+        Console.WriteLine(
+            patientName);
 
         clinic.PrintSchedule(
             new DateTime(2027, 5, 9));
