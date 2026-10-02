@@ -59,6 +59,7 @@ public class DoctorManager
         for (int i = 0; i < _count; i++)
         {
             if (_doctors[i].Speciality
+                .ToString()
                 .ToLower()
                 .Contains(search))
             {
@@ -73,6 +74,7 @@ public class DoctorManager
         for (int i = 0; i < _count; i++)
         {
             if (_doctors[i].Speciality
+                .ToString()
                 .ToLower()
                 .Contains(search))
             {

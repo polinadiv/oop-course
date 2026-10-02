@@ -658,7 +658,7 @@ internal class Program
                 "Іван",
                 "Петренко",
                 new DateTime(1985, 5, 10),
-                "A(II)",
+                BloodType.APositive,
                 "0501111111"));
 
         clinic.Patients.Add(
@@ -666,7 +666,7 @@ internal class Program
                 "Олена",
                 "Коваль",
                 new DateTime(1992, 8, 15),
-                "B(III)",
+                BloodType.BPositive,
                 "0502222222"));
 
         clinic.Patients.Add(
@@ -674,7 +674,7 @@ internal class Program
                 "Максим",
                 "Бойко",
                 new DateTime(2010, 3, 12),
-                "O(I)",
+                BloodType.OPositive,
                 "0503333333"));
 
         clinic.Patients.Add(
@@ -682,27 +682,27 @@ internal class Program
                 "Марія",
                 "Ткач",
                 new DateTime(1999, 11, 20),
-                "AB(IV)",
+                BloodType.ABPositive,
                 "0504444444"));
 
         Doctor doctor1 = new Doctor(
             "Олег",
             "Сидоренко",
-            "Кардіологія",
+            Speciality.Cardiology,
             "LIC-001",
             "+380501111111");
 
         Doctor doctor2 = new Doctor(
             "Наталія",
             "Мороз",
-            "Неврологія",
+            Speciality.Neurology,
             "LIC-002",
             "+380502222222");
 
         Doctor doctor3 = new Doctor(
             "Андрій",
             "Власенко",
-            "Педіатрія",
+            Speciality.Pediatrics,
             "LIC-003",
             "+380503333333");
 
