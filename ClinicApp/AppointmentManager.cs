@@ -18,6 +18,20 @@ public class AppointmentManager
         }
     }
 
+    public Appointment? this[int index]
+    {
+        get
+        {
+            if (index < 0 ||
+                index >= _count)
+            {
+                return null;
+            }
+
+            return _appointments[index];
+        }
+    }
+
     public AppointmentManager(
         PatientManager patients,
         DoctorManager doctors)
@@ -193,33 +207,48 @@ public class AppointmentManager
     public Appointment[] GetByDate(DateTime date)
     {
         int matches = 0;
+
         for (int i = 0; i < _count; i++)
-{
-    if (_appointments[i]
-            .ScheduledAt.Date ==
-        date.Date)
-    {
-        matches++;
+        {
+            if (_appointments[i]
+                    .ScheduledAt.Date ==
+                date.Date)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i]
+                    .ScheduledAt.Date ==
+                date.Date)
+            {
+                result[index] =
+                    _appointments[i];
+
+                index++;
+            }
+        }
+
+        return result;
     }
-}
 
-Appointment[] result =
-    new Appointment[matches];
-
-int index = 0;
-
-for (int i = 0; i < _count; i++)
-{
-    if (_appointments[i]
-            .ScheduledAt.Date ==
-        date.Date)
+    public Appointment[] GetByDate(
+        int year,
+        int month,
+        int day)
     {
-        result[index] = _appointments[i];
-        index++;
-    }
-}
-
-return result;
+        return GetByDate(
+            new DateTime(
+                year,
+                month,
+                day));
     }
 
     public Appointment[] GetUpcoming()

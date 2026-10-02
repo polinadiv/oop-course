@@ -8,12 +8,11 @@
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Speciality { get; set; }
+        public Speciality Speciality { get; set; }
         public string LicenseNumber { get; set; }
         public string Phone { get; set; }
 
-        public int WorkStartHour { get; set; }
-        public int WorkEndHour { get; set; }
+        public WorkSchedule Schedule { get; set; }
 
         public string FullName
         {
@@ -27,7 +26,7 @@
         {
             get
             {
-                return WorkEndHour - WorkStartHour;
+                return Schedule.HoursPerDay;
             }
         }
 
@@ -35,10 +34,7 @@
         {
             get
             {
-                return WorkStartHour.ToString("D2") +
-                       ":00-" +
-                       WorkEndHour.ToString("D2") +
-                       ":00";
+                return Schedule.Display;
             }
         }
 
@@ -46,32 +42,32 @@
         {
             get
             {
-                return CanAcceptAt(DateTime.Now.Hour);
+                return Schedule.IsNow;
             }
         }
 
         public Doctor()
-            : this("", "", "", "", "")
+            : this("", "", Speciality.General, "", "")
         {
         }
 
         public Doctor(
             string firstName,
             string lastName,
-            string speciality)
+            Speciality speciality)
             : this(
-                  firstName,
-                  lastName,
-                  speciality,
-                  "",
-                  "")
+                firstName,
+                lastName,
+                speciality,
+                "",
+                "")
         {
         }
 
         public Doctor(
             string firstName,
             string lastName,
-            string speciality,
+            Speciality speciality,
             string licenseNumber,
             string phone)
         {
@@ -83,14 +79,13 @@
             LicenseNumber = licenseNumber;
             Phone = phone;
 
-            WorkStartHour = 8;
-            WorkEndHour = 17;
+            Schedule =
+                new WorkSchedule(8, 17);
         }
 
         public bool CanAcceptAt(int hour)
         {
-            return hour >= WorkStartHour &&
-                   hour < WorkEndHour;
+            return Schedule.Contains(hour);
         }
 
         public override string ToString()
@@ -108,9 +103,9 @@
 
             return "[" + Id + "] " +
                    FullName + " | " +
-                   Speciality + " | " +
+                   ClinicFormatter.FormatSpeciality(Speciality) + " | " +
                    LicenseNumber + " | " +
-                   "Тел: " + Phone + " | " +
+                   "Тел: " + ClinicFormatter.FormatPhone(Phone) + " | " +
                    WorkSchedule + " (" +
                    WorkingHoursPerDay + " год.) | " +
                    status;
