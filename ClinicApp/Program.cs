@@ -710,6 +710,26 @@ internal class Program
         clinic.Doctors.Add(doctor2);
         clinic.Doctors.Add(doctor3);
 
+        WorkSchedule morning =
+    new WorkSchedule(8, 17);
+
+        WorkSchedule copy =
+            morning;
+
+        copy =
+            new WorkSchedule(10, 18);
+
+        Console.WriteLine(
+            "Morning: " + morning);
+
+        Console.WriteLine(
+            "Copy: " + copy);
+
+        clinic.Appointments.Book(
+            1,
+            1,
+            new DateTime(2027, 5, 9, 10, 0, 0));
+
         clinic.Appointments.Book(
             1,
             1,
