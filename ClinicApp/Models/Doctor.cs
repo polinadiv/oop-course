@@ -4,37 +4,73 @@ namespace ClinicApp.Models
 {
     public class Doctor
     {
-        private static int _nextId = 1;
-
-        public int Id { get; }
-
         private string _firstName;
         private string _lastName;
         private string _licenseNumber;
         private string _phone;
+        private static int _nextId = 1;
+
+        public int Id { get; }
 
         public string FirstName
         {
             get => _firstName;
-            set => _firstName = value;
-        }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
+                {
+                    throw new ArgumentException(nameof(FirstName));
+                }
 
+                _firstName = value;
+            }
+        }
         public string LastName
         {
             get => _lastName;
-            set => _lastName = value;
-        }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
+                {
+                    throw new ArgumentException(nameof(LastName));
+                }
 
+                _lastName = value;
+            }
+        }
         public string LicenseNumber
         {
             get => _licenseNumber;
-            set => _licenseNumber = value;
-        }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException(nameof(LicenseNumber));
+                }
 
+                _licenseNumber = value;
+            }
+        }
         public string Phone
         {
             get => _phone;
-            set => _phone = value;
+            set
+            {
+                if (value == null || value.Length != 10)
+                {
+                    throw new ArgumentException(nameof(Phone));
+                }
+
+                for (int i = 0; i < value.Length; i++)
+                {
+                    if (!char.IsDigit(value[i]))
+                    {
+                        throw new ArgumentException(nameof(Phone));
+                    }
+                }
+
+                _phone = value;
+            }
         }
         public Speciality Speciality { get; set; }
 

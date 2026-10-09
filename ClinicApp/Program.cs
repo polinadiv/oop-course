@@ -694,21 +694,21 @@ internal class Program
             "Сидоренко",
             Speciality.Cardiology,
             "LIC-001",
-            "+380501111111");
+            "0501111111");
 
         Doctor doctor2 = new Doctor(
             "Наталія",
             "Мороз",
             Speciality.Neurology,
             "LIC-002",
-            "+380502222222");
+            "0502222222");
 
         Doctor doctor3 = new Doctor(
             "Андрій",
             "Власенко",
             Speciality.Pediatrics,
             "LIC-003",
-            "+380503333333");
+            "0503333333");
 
         clinic.Doctors.Add(doctor1);
         clinic.Doctors.Add(doctor2);

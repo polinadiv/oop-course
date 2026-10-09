@@ -20,7 +20,15 @@ public class Appointment
     public int DurationMinutes
     {
         get => _durationMinutes;
-        set => _durationMinutes = value;
+        set
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(DurationMinutes));
+            }
+
+            _durationMinutes = value;
+        }
     }
 
     public AppointmentStatus Status { get; private set; }
