@@ -17,11 +17,7 @@ namespace ClinicApp.Models
             get => _firstName;
             set
             {
-                if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
-                {
-                    throw new ArgumentException(nameof(FirstName));
-                }
-
+                ClinicValidator.ValidateName(value, nameof(FirstName));
                 _firstName = value;
             }
         }
@@ -30,11 +26,7 @@ namespace ClinicApp.Models
             get => _lastName;
             set
             {
-                if (string.IsNullOrWhiteSpace(value) || value.Length > 50)
-                {
-                    throw new ArgumentException(nameof(LastName));
-                }
-
+                ClinicValidator.ValidateName(value, nameof(LastName));
                 _lastName = value;
             }
         }
@@ -43,11 +35,7 @@ namespace ClinicApp.Models
             get => _licenseNumber;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException(nameof(LicenseNumber));
-                }
-
+                ClinicValidator.ValidateLicenseNumber(value, nameof(LicenseNumber));
                 _licenseNumber = value;
             }
         }
@@ -56,19 +44,7 @@ namespace ClinicApp.Models
             get => _phone;
             set
             {
-                if (value == null || value.Length != 10)
-                {
-                    throw new ArgumentException(nameof(Phone));
-                }
-
-                for (int i = 0; i < value.Length; i++)
-                {
-                    if (!char.IsDigit(value[i]))
-                    {
-                        throw new ArgumentException(nameof(Phone));
-                    }
-                }
-
+                ClinicValidator.ValidatePhone(value, nameof(Phone));
                 _phone = value;
             }
         }

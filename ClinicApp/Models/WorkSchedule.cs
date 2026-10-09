@@ -1,5 +1,7 @@
 ﻿namespace ClinicApp.Models;
 
+using ClinicApp.Utils;
+
 public struct WorkSchedule
 {
     public int Start { get; }
@@ -8,19 +10,21 @@ public struct WorkSchedule
 
     public WorkSchedule(int start, int end)
     {
-        if (start < 0 || start > 23)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start));
-        }
+        ClinicValidator.ValidateHour(
+            start,
+            nameof(start),
+            0,
+            23);
 
-        if (end < 1 || end > 24)
-        {
-            throw new ArgumentOutOfRangeException(nameof(end));
-        }
+        ClinicValidator.ValidateHour(
+            end,
+            nameof(end),
+            1,
+            24);
 
         if (start >= end)
         {
-            throw new ArgumentOutOfRangeException(nameof(start));
+            throw new ArgumentException(nameof(start));
         }
 
         Start = start;
