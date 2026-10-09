@@ -645,6 +645,10 @@ internal class Program
             " місця (зросте при потребі)");
     }
 }*/
+using ClinicApp.Models;
+using ClinicApp.Managers;
+using ClinicApp.Enums;
+using ClinicApp.Utils;
 namespace ClinicApp;
 
 internal class Program
