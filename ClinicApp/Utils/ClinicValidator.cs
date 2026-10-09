@@ -1,4 +1,5 @@
-﻿namespace ClinicApp.Utils;
+﻿using System.Text.RegularExpressions;
+namespace ClinicApp.Utils;
 
 public static class ClinicValidator
 {
@@ -13,20 +14,13 @@ public static class ClinicValidator
     }
 
     public static void ValidatePhone(
-        string value,
-        string fieldName)
+    string value,
+    string fieldName)
     {
-        if (value == null || value.Length != 10)
+        if (value == null ||
+            !_phoneRegex.IsMatch(value))
         {
             throw new ArgumentException(fieldName);
-        }
-
-        for (int i = 0; i < value.Length; i++)
-        {
-            if (!char.IsDigit(value[i]))
-            {
-                throw new ArgumentException(fieldName);
-            }
         }
     }
 
@@ -71,4 +65,23 @@ public static class ClinicValidator
             throw new ArgumentOutOfRangeException(fieldName);
         }
     }
+    public static void ValidateEmail(
+    string value,
+    string fieldName)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        if (!_emailRegex.IsMatch(value))
+        {
+            throw new ArgumentException(fieldName);
+        }
+    }
+    private static readonly Regex _phoneRegex =
+    new Regex(@"^[0-9]{10}$");
+
+    private static readonly Regex _emailRegex =
+        new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
 }
