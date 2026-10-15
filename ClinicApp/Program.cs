@@ -645,6 +645,10 @@ internal class Program
             " місця (зросте при потребі)");
     }
 }*/
+using ClinicApp.Models;
+using ClinicApp.Managers;
+using ClinicApp.Enums;
+using ClinicApp.Utils;
 namespace ClinicApp;
 
 internal class Program
@@ -653,62 +657,58 @@ internal class Program
     {
         Clinic clinic = new Clinic("Медична клініка");
 
-        clinic.Patients.Add(
-            new Patient(
-                "Іван",
-                "Петренко",
-                new DateTime(1985, 5, 10),
-                BloodType.APositive,
-                "0501111111"));
+        try
+        {
+            clinic.Patients.Add(
+                new Patient("Іван", "Петренко", new DateTime(1985, 5, 10), BloodType.APositive, "0501111111"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        clinic.Patients.Add(
-            new Patient(
-                "Олена",
-                "Коваль",
-                new DateTime(1992, 8, 15),
-                BloodType.BPositive,
-                "0502222222"));
+        try
+        {
+            clinic.Patients.Add(
+                new Patient("Олена", "Коваль", new DateTime(1992, 8, 15), BloodType.BPositive, "0502222222"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        clinic.Patients.Add(
-            new Patient(
-                "Максим",
-                "Бойко",
-                new DateTime(2010, 3, 12),
-                BloodType.OPositive,
-                "0503333333"));
+        try
+        {
+            clinic.Patients.Add(
+                new Patient("Максим", "Бойко", new DateTime(2010, 3, 12), BloodType.OPositive, "0503333333"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        clinic.Patients.Add(
-            new Patient(
-                "Марія",
-                "Ткач",
-                new DateTime(1999, 11, 20),
-                BloodType.ABPositive,
-                "0504444444"));
+        try
+        {
+            clinic.Patients.Add(
+                new Patient("Марія", "Ткач", new DateTime(1999, 11, 20), BloodType.ABPositive, "0504444444"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        Doctor doctor1 = new Doctor(
-            "Олег",
-            "Сидоренко",
-            Speciality.Cardiology,
-            "LIC-001",
-            "+380501111111");
+        try
+        {
+            clinic.Doctors.Add(new Doctor("Олег", "Сидоренко", Speciality.Cardiology, "LIC-001", "0501111111"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        Doctor doctor2 = new Doctor(
-            "Наталія",
-            "Мороз",
-            Speciality.Neurology,
-            "LIC-002",
-            "+380502222222");
+        try
+        {
+            clinic.Doctors.Add(new Doctor("Наталія", "Мороз", Speciality.Neurology, "LIC-002", "0502222222"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
-        Doctor doctor3 = new Doctor(
-            "Андрій",
-            "Власенко",
-            Speciality.Pediatrics,
-            "LIC-003",
-            "+380503333333");
-
-        clinic.Doctors.Add(doctor1);
-        clinic.Doctors.Add(doctor2);
-        clinic.Doctors.Add(doctor3);
+        try
+        {
+            clinic.Doctors.Add(new Doctor("Андрій", "Власенко", Speciality.Pediatrics, "LIC-003", "0503333333"));
+        }
+        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (ArgumentOutOfRangeException e) { Console.WriteLine("Помилка: " + e.Message); }
 
         WorkSchedule morning =
     new WorkSchedule(8, 17);

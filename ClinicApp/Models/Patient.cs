@@ -1,22 +1,70 @@
-﻿namespace ClinicApp;
+﻿using ClinicApp.Enums;
+using ClinicApp.Utils;
+namespace ClinicApp.Models;
 
 public class Patient
 {
+    private string _firstName;
+    private string _lastName;
+    private DateTime _dateOfBirth;
+    private string _phone;
     private static int _nextId = 1;
 
     public int Id { get; }
 
-    public string FirstName { get; set; }
-
-    public string LastName { get; set; }
-
-    public DateTime DateOfBirth { get; set; }
+    public string FirstName
+    {
+        get => _firstName;
+        set
+        {
+            ClinicValidator.ValidateName(value, nameof(FirstName));
+            _firstName = value;
+        }
+    }
+    public string LastName
+    {
+        get => _lastName;
+        set
+        {
+            ClinicValidator.ValidateName(value, nameof(LastName));
+            _lastName = value;
+        }
+    }
+    public DateTime DateOfBirth
+    {
+        get => _dateOfBirth;
+        set
+        {
+            ClinicValidator.ValidateDate(value, nameof(DateOfBirth));
+            _dateOfBirth = value;
+        }
+    }
+    public string Phone
+    {
+        get => _phone;
+        set
+        {
+            ClinicValidator.ValidatePhone(value, nameof(Phone));
+            _phone = value;
+        }
+    }
 
     public BloodType BloodType { get; set; }
 
-    public string Phone { get; set; }
+    private string _email;
 
-    public string Email { get; set; }
+    public string Email
+    {
+        get => _email;
+        set
+        {
+            ClinicValidator.ValidateEmail(
+                value,
+                nameof(Email));
+
+            _email = value;
+        }
+    }
 
     public string FullName
     {
