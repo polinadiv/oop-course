@@ -679,15 +679,15 @@ internal class Program
         try
         {
             clinic.MedicalRecords.Add(new Diagnosis(
-                1, 1, DateTime.Now.AddDays(-2), "J02", "Гострий тонзиліт", false
+                1, 1, DateTime.Now.AddDays(-20), "J00", "ГРВІ (Хронічне)", true
             ));
 
             clinic.MedicalRecords.Add(new LabResult(
-                1, 1, DateTime.Now.AddDays(-5), "Глюкоза", 9.5, "ммоль/л", "3.9-6.1", false
+                1, 1, DateTime.Now.AddDays(-5), "Глюкоза", 5.5, "ммоль/л", "3.9-6.1", true
             ));
 
             clinic.MedicalRecords.Add(new Prescription(
-                1, 1, DateTime.Now.AddDays(-15), "Антибіотик", "250мг", 5, "Завершено курс"
+                1, 1, DateTime.Now.AddDays(-2), "Парацетамол", "500мг", 5, "Після їжі"
             ));
         }
         catch (Exception e)
