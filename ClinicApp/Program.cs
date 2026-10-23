@@ -650,6 +650,7 @@ using ClinicApp.Managers;
 using ClinicApp.Enums;
 using ClinicApp.Utils;
 using System.Globalization;
+using ClinicApp.Interfaces;
 
 namespace ClinicApp;
 
@@ -694,6 +695,36 @@ internal class Program
         {
             Console.WriteLine("Помилка додавання початкових записів: " + e.Message);
         }
+
+        /* Appointment a =
+    new Appointment(
+        1,
+        1,
+        DateTime.Now);
+
+        ICancellable c = a;
+
+        Console.WriteLine(c.IsCancelled);
+        Console.WriteLine(c.CancellationReason);
+
+        Console.WriteLine(
+            c.Cancel("Лікар захворів"));
+
+        Console.WriteLine(c.IsCancelled);
+        Console.WriteLine(c.CancellationReason);
+
+        Console.WriteLine(
+            c.Cancel("ще раз"));
+
+        a.MarkPaid();
+
+        Console.WriteLine(a.IsPaid);
+
+        IPayable p = a;
+
+        Console.WriteLine(
+            p is ICancellable);
+        */
 
         while (true)
         {
