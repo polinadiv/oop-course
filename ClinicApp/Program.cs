@@ -695,7 +695,6 @@ internal class Program
         {
             Console.WriteLine("Помилка додавання початкових записів: " + e.Message);
         }
-
         while (true)
         {
             Console.WriteLine();
