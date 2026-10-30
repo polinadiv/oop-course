@@ -345,6 +345,94 @@ public class AppointmentManager
         return result;
     }
 
+    public Appointment[] GetUrgent()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is UrgentAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is UrgentAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+    public Appointment[] GetSpecialist()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is SpecialistAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is SpecialistAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+    public Appointment[] GetRegular()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is RegularAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is RegularAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+
     public Appointment[] GetByDate(DateTime date)
     {
         int matches = 0;
@@ -458,21 +546,26 @@ public void DisplayAppointment(
             appointment.DoctorId;
     }
 
-    string result =
-        "[" + appointment.Id + "] " +
-        patientName +
-        " → " +
-        doctorName +
-        " | " +
-        appointment.ScheduledAt
-            .ToString("dd.MM.yyyy HH:mm") +
-        "–" +
-        appointment.EndsAt
-            .ToString("HH:mm") +
-        " | " +
-        appointment.Status;
+        string result =
+         "[" + appointment.Id + "] " +
+         appointment.GetDescription() +
+         " | " +
+         patientName +
+         " → " +
+         doctorName +
+         " | " +
+         appointment.ScheduledAt
+             .ToString("dd.MM.yyyy HH:mm") +
+         "-" +
+         appointment.EndsAt
+             .ToString("HH:mm") +
+         " | " +
+         appointment.Status +
+         " | " +
+         appointment.GetCost().ToString("F2") +
+         " грн";
 
-    if (appointment.Notes.Length > 0)
+        if (appointment.Notes.Length > 0)
     {
         result +=
             " | " +

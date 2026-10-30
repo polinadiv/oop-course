@@ -912,6 +912,7 @@ internal class Program
             Console.WriteLine();
             Console.WriteLine("=== Меню записів ===");
             Console.WriteLine("8. Скасувати всі записи пацієнта");
+            Console.WriteLine("9. За типом прийому");
             Console.WriteLine("0. Назад");
             string choice = Console.ReadLine();
 
@@ -935,6 +936,33 @@ internal class Program
                         int count = AppointmentManager.CancelAll(cancellables, reason);
                         Console.WriteLine("Скасовано записів: " + count);
                     }
+                    break;
+
+                case "9":
+
+                    Console.WriteLine("1. Термінові");
+                    Console.WriteLine("2. Консультації спеціаліста");
+                    Console.WriteLine("3. Звичайні");
+
+                    string? typeChoice =
+                        Console.ReadLine();
+
+                    if (typeChoice == "1")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetUrgent());
+                    }
+                    else if (typeChoice == "2")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetSpecialist());
+                    }
+                    else if (typeChoice == "3")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetRegular());
+                    }
+
                     break;
 
                 case "0":
