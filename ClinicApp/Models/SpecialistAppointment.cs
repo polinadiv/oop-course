@@ -1,0 +1,29 @@
+﻿using ClinicApp.Enums;
+
+namespace ClinicApp.Models;
+
+public sealed class SpecialistAppointment : Appointment
+{
+    public string ConsultationTopic { get; }
+
+    public SpecialistAppointment(
+        int patientId,
+        int doctorId,
+        DateTime scheduledAt,
+        string consultationTopic,
+        int durationMinutes = 30)
+        : base(patientId, doctorId, scheduledAt, durationMinutes)
+    {
+        ConsultationTopic = consultationTopic;
+    }
+
+    public override decimal GetCost()
+    {
+        return base.GetCost() * 1.3m;
+    }
+
+    public override string GetDescription()
+    {
+        return "Консультація спеціаліста: " + ConsultationTopic;
+    }
+}

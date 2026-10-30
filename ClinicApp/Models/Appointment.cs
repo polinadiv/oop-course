@@ -125,9 +125,19 @@ public bool Complete()
         return true;
     }
 
-    public decimal GetCost()
+    public virtual decimal GetCost()
     {
-        return DurationMinutes * 10m;
+        return DurationMinutes * 10m * DiscountMultiplier;
+    }
+
+    public virtual string GetDescription()
+    {
+        return "Прийом";
+    }
+
+    public int GetPriority()
+    {
+        return 3;
     }
 
     public void MarkPaid()
@@ -142,16 +152,16 @@ public bool Complete()
 
     public override string ToString()
     {
-        string result =
-            "[" + Id + "] " +
-            "Пацієнт #" + PatientId +
-            " → Лікар #" + DoctorId +
-            " | " +
-            ScheduledAt.ToString("dd.MM.yyyy HH:mm") +
-            "–" +
-            EndsAt.ToString("HH:mm") +
-            " | " +
-            Status;
+        string result = string.Format(
+            "[{0}] {1} | Пацієнт #{2} → Лікар #{3} | {4:dd.MM.yyyy HH:mm} | {5} хв | {6:F2} грн | {7}",
+            Id,
+            GetDescription(),
+            PatientId,
+            DoctorId,
+            ScheduledAt,
+            DurationMinutes,
+            GetCost(),
+            Status);
 
         if (Notes.Length > 0)
         {
@@ -160,4 +170,6 @@ public bool Complete()
 
         return result;
     }
+    // Варіант А: знижка реалізована через множник у базовому класі Appointment. Усі підкласи автоматично враховують її через base.GetCost(),тому не потрібно створювати нові VIP-підкласи.
+    public decimal DiscountMultiplier { get; set; } = 1m;
 }

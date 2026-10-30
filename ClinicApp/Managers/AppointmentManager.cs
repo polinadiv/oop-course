@@ -96,7 +96,7 @@ public class AppointmentManager
         }
 
         Appointment appointment =
-            new Appointment(
+            new RegularAppointment(
                 patientId,
                 doctorId,
                 scheduledAt,
@@ -118,17 +118,128 @@ public class AppointmentManager
         return true;
     }
 
-    public bool Cancel(int id, string reason)
+    public bool BookUrgent(
+    int patientId,
+    int doctorId,
+    DateTime scheduledAt,
+    string urgencyNote,
+    int durationMinutes = 30)
     {
-        Appointment? appointment =
-            FindById(id);
+        Patient? patient =
+            _patients.FindById(patientId);
 
-        if (appointment == null)
+        if (patient == null)
+        {
+            Console.WriteLine(
+                "Помилка: пацієнта з ID " +
+                patientId +
+                " не знайдено.");
+
+            return false;
+        }
+
+        Doctor? doctor =
+            _doctors.FindById(doctorId);
+
+        if (doctor == null)
+        {
+            Console.WriteLine(
+                "Помилка: лікаря з ID " +
+                doctorId +
+                " не знайдено.");
+
+            return false;
+        }
+
+        if (_count >= MaxAppointments)
         {
             return false;
         }
 
-        return appointment.Cancel(reason);
+        Appointment appointment =
+            new UrgentAppointment(
+                patientId,
+                doctorId,
+                scheduledAt,
+                durationMinutes,
+                urgencyNote);
+
+        _appointments[_count] = appointment;
+        _count++;
+
+        Console.WriteLine(
+            "Запис [" +
+            appointment.Id +
+            "] створено: " +
+            patient.FullName +
+            " → " +
+            doctor.FullName +
+            " о " +
+            scheduledAt.ToString("dd.MM.yyyy HH:mm"));
+
+        return true;
+    }
+
+    public bool BookSpecialist(
+     int patientId,
+     int doctorId,
+     DateTime scheduledAt,
+     string consultationTopic,
+     int durationMinutes = 30)
+    {
+        Patient? patient =
+            _patients.FindById(patientId);
+
+        if (patient == null)
+        {
+            Console.WriteLine(
+                "Помилка: пацієнта з ID " +
+                patientId +
+                " не знайдено.");
+
+            return false;
+        }
+
+        Doctor? doctor =
+            _doctors.FindById(doctorId);
+
+        if (doctor == null)
+        {
+            Console.WriteLine(
+                "Помилка: лікаря з ID " +
+                doctorId +
+                " не знайдено.");
+
+            return false;
+        }
+
+        if (_count >= MaxAppointments)
+        {
+            return false;
+        }
+
+        Appointment appointment =
+            new SpecialistAppointment(
+                patientId,
+                doctorId,
+                scheduledAt,
+                consultationTopic,
+                durationMinutes);
+
+        _appointments[_count] = appointment;
+        _count++;
+
+        Console.WriteLine(
+            "Запис [" +
+            appointment.Id +
+            "] створено: " +
+            patient.FullName +
+            " → " +
+            doctor.FullName +
+            " о " +
+            scheduledAt.ToString("dd.MM.yyyy HH:mm"));
+
+        return true;
     }
 
     public bool Complete(int id)
@@ -233,6 +344,94 @@ public class AppointmentManager
 
         return result;
     }
+
+    public Appointment[] GetUrgent()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is UrgentAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is UrgentAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+    public Appointment[] GetSpecialist()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is SpecialistAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is SpecialistAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
+    public Appointment[] GetRegular()
+    {
+        int matches = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is RegularAppointment)
+            {
+                matches++;
+            }
+        }
+
+        Appointment[] result =
+            new Appointment[matches];
+
+        int index = 0;
+
+        for (int i = 0; i < _count; i++)
+        {
+            if (_appointments[i] is RegularAppointment)
+            {
+                result[index] = _appointments[i];
+                index++;
+            }
+        }
+
+        return result;
+    }
+
 
     public Appointment[] GetByDate(DateTime date)
     {
@@ -347,21 +546,26 @@ public void DisplayAppointment(
             appointment.DoctorId;
     }
 
-    string result =
-        "[" + appointment.Id + "] " +
-        patientName +
-        " → " +
-        doctorName +
-        " | " +
-        appointment.ScheduledAt
-            .ToString("dd.MM.yyyy HH:mm") +
-        "–" +
-        appointment.EndsAt
-            .ToString("HH:mm") +
-        " | " +
-        appointment.Status;
+        string result =
+         "[" + appointment.Id + "] " +
+         appointment.GetDescription() +
+         " | " +
+         patientName +
+         " → " +
+         doctorName +
+         " | " +
+         appointment.ScheduledAt
+             .ToString("dd.MM.yyyy HH:mm") +
+         "-" +
+         appointment.EndsAt
+             .ToString("HH:mm") +
+         " | " +
+         appointment.Status +
+         " | " +
+         appointment.GetCost().ToString("F2") +
+         " грн";
 
-    if (appointment.Notes.Length > 0)
+        if (appointment.Notes.Length > 0)
     {
         result +=
             " | " +

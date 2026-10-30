@@ -696,6 +696,51 @@ internal class Program
             Console.WriteLine("Помилка додавання початкових записів: " + e.Message);
         }
 
+        clinic.Appointments.Book(
+    1,
+    1,
+    DateTime.Now.AddDays(1));
+
+        clinic.Appointments.BookUrgent(
+            1,
+            1,
+            DateTime.Now.AddHours(2),
+            "Біль у грудях");
+
+        clinic.Appointments.BookSpecialist(
+            1,
+            1,
+            DateTime.Now.AddDays(2),
+            "Кардіологія");
+
+        // GetDescription() працює поліморфно,тому що метод virtual в Appointment і override в UrgentAppointment.
+
+        // GetPriority() повертає 3 через змінну типу Appointment, тому що метод прихований через new, а не перевизначений.
+
+        // Щоб GetPriority() теж працював поліморфно, треба зробити його virtual у Appointment та override у UrgentAppointment.
+
+        UrgentAppointment urgent =
+            new UrgentAppointment(
+                1,
+                1,
+                DateTime.Now,
+                30,
+                "Біль у грудях");
+
+        Appointment appointment = urgent;
+
+        Console.WriteLine("== new vs override ==");
+
+        Console.WriteLine("Через Appointment:");
+        Console.WriteLine(appointment.GetDescription());
+        Console.WriteLine(appointment.GetPriority());
+
+        Console.WriteLine();
+
+        Console.WriteLine("Через UrgentAppointment:");
+        Console.WriteLine(urgent.GetDescription());
+        Console.WriteLine(urgent.GetPriority());
+
         while (true)
         {
             Console.WriteLine();
@@ -867,6 +912,7 @@ internal class Program
             Console.WriteLine();
             Console.WriteLine("=== Меню записів ===");
             Console.WriteLine("8. Скасувати всі записи пацієнта");
+            Console.WriteLine("9. За типом прийому");
             Console.WriteLine("0. Назад");
             string choice = Console.ReadLine();
 
@@ -892,11 +938,38 @@ internal class Program
                     }
                     break;
 
+                case "9":
+
+                    Console.WriteLine("1. Термінові");
+                    Console.WriteLine("2. Консультації спеціаліста");
+                    Console.WriteLine("3. Звичайні");
+
+                    string? typeChoice =
+                        Console.ReadLine();
+
+                    if (typeChoice == "1")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetUrgent());
+                    }
+                    else if (typeChoice == "2")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetSpecialist());
+                    }
+                    else if (typeChoice == "3")
+                    {
+                        clinic.Appointments.DisplayList(
+                            clinic.Appointments.GetRegular());
+                    }
+
+                    break;
+
                 case "0":
                     return;
             }
         }
-    }
+
 
     static void MedicalRecordsMenu(Clinic clinic)
     {
