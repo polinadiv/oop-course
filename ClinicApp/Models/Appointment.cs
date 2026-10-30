@@ -127,7 +127,7 @@ public bool Complete()
 
     public virtual decimal GetCost()
     {
-        return DurationMinutes * 10m;
+        return DurationMinutes * 10m * DiscountMultiplier;
     }
 
     public virtual string GetDescription()
@@ -170,4 +170,6 @@ public bool Complete()
 
         return result;
     }
+    // Варіант А: знижка реалізована через множник у базовому класі Appointment. Усі підкласи автоматично враховують її через base.GetCost(),тому не потрібно створювати нові VIP-підкласи.
+    public decimal DiscountMultiplier { get; set; } = 1m;
 }

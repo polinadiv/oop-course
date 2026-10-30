@@ -969,7 +969,7 @@ internal class Program
                     return;
             }
         }
-    }
+
 
     static void MedicalRecordsMenu(Clinic clinic)
     {
