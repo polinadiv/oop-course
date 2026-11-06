@@ -969,7 +969,7 @@ internal class Program
                     return;
             }
         }
-
+    }
 
     static void MedicalRecordsMenu(Clinic clinic)
     {
@@ -1072,4 +1072,4 @@ internal class Program
             "Пацієнтів у системі: " +
             clinic.Patients.Count);
     }
-}
+  }
