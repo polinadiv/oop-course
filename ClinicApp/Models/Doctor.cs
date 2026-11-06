@@ -3,7 +3,7 @@ using ClinicApp.Utils;
 using ClinicApp.Interfaces;
 namespace ClinicApp.Models
 {
-    public class Doctor : ISchedulable
+    public class Doctor : ISchedulable, IIdentifiable
     {
         private string _firstName;
         private string _lastName;

@@ -1,8 +1,9 @@
 ﻿using ClinicApp.Enums;
 using ClinicApp.Utils;
+using ClinicApp.Interfaces;
 namespace ClinicApp.Models;
 
-public class Patient
+public class Patient : IIdentifiable
 {
     private string _firstName;
     private string _lastName;
