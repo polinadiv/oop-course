@@ -18,6 +18,7 @@ public class Clinic
         get;
     }
 
+    public WaitingQueue<Patient> WaitingRoom { get; }
     public Clinic(string name)
     {
         Name = name;
@@ -32,6 +33,8 @@ public class Clinic
         Billing =
             new BillingManager(
                 Appointments);
+
+        WaitingRoom = new WaitingQueue<Patient>();
     }
 
     public void PrintSchedule(DateTime date)
