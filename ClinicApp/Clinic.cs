@@ -18,6 +18,8 @@ public class Clinic
         get;
     }
 
+    public AnalyticsManager Analytics { get; }
+
     public WaitingQueue<Patient> WaitingRoom { get; }
     public Clinic(string name)
     {
@@ -35,6 +37,8 @@ public class Clinic
                 Appointments);
 
         WaitingRoom = new WaitingQueue<Patient>();
+
+        Analytics = new AnalyticsManager(Appointments, Doctors, Patients);
     }
 
     public void PrintSchedule(DateTime date)
