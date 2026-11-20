@@ -714,33 +714,6 @@ internal class Program
             DateTime.Now.AddDays(2),
             "Кардіологія");
 
-        // GetDescription() працює поліморфно,тому що метод virtual в Appointment і override в UrgentAppointment.
-
-        // GetPriority() повертає 3 через змінну типу Appointment, тому що метод прихований через new, а не перевизначений.
-
-        // Щоб GetPriority() теж працював поліморфно, треба зробити його virtual у Appointment та override у UrgentAppointment.
-
-        UrgentAppointment urgent =
-            new UrgentAppointment(
-                1,
-                1,
-                DateTime.Now,
-                30,
-                "Біль у грудях");
-
-        Appointment appointment = urgent;
-
-        Console.WriteLine("== new vs override ==");
-
-        Console.WriteLine("Через Appointment:");
-        Console.WriteLine(appointment.GetDescription());
-        Console.WriteLine(appointment.GetPriority());
-
-        Console.WriteLine();
-
-        Console.WriteLine("Через UrgentAppointment:");
-        Console.WriteLine(urgent.GetDescription());
-        Console.WriteLine(urgent.GetPriority());
 
         while (true)
         {
