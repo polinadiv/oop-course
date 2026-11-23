@@ -731,6 +731,17 @@ internal class Program
 
         clinic.Logger.LogInfo("Створено запис до спеціаліста");
 
+        if (clinic.Session.Exists())
+        {
+            Console.Write("Знайдено збережену сесію. Завантажити? (y/n): ");
+
+            if (Console.ReadLine()?.ToLower() == "y")
+            {
+                int loaded = clinic.Session.Load(clinic);
+                Console.WriteLine($"Завантажено {loaded} пацієнтів.");
+            }
+        }
+
 
         while (true)
         {
@@ -783,6 +794,15 @@ internal class Program
                     FilesMenu(clinic);
                     break;
                 case "0":
+
+                    Console.Write("Зберегти сесію? (y/n): ");
+
+                    if (Console.ReadLine()?.ToLower() == "y")
+                    {
+                        clinic.Session.Save(clinic);
+                        Console.WriteLine("Сесію збережено.");
+                    }
+
                     return;
                 default:
                     Console.WriteLine("Невірний вибір.");
