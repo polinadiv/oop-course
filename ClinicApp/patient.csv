@@ -1,0 +1,4 @@
+FirstName,LastName,DateOfBirth,BloodType,Phone
+Іван,Петренко,15.03.1985,APositive,0501234567
+Олена,Коваль,22.07.1992,BNegative,0672345678
+НеПравильний рядок,Ткач,01.01.2000,APositive,050999999
