@@ -669,14 +669,24 @@ internal class Program
         {
             clinic.Patients.Add(
                 new Patient("Іван", "Петренко", new DateTime(1985, 5, 10), BloodType.APositive, "0501111111"));
+            clinic.Logger.LogInfo("Додано пацієнта: Іван Петренко");
         }
-        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (Exception ex)
+        {
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка: " + ex.Message);
+        }
 
         try
         {
             clinic.Doctors.Add(new Doctor("Олег", "Сидоренко", Speciality.Cardiology, "LIC-001", "0501111111"));
+            clinic.Logger.LogInfo("Додано лікаря: Олег Сидоренко");
         }
-        catch (ArgumentException e) { Console.WriteLine("Помилка: " + e.Message); }
+        catch (Exception ex)
+        {
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка: " + ex.Message);
+        }
 
         try
         {
@@ -692,27 +702,34 @@ internal class Program
                 1, 1, DateTime.Now.AddDays(-2), "Парацетамол", "500мг", 5, "Після їжі"
             ));
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine("Помилка додавання початкових записів: " + e.Message);
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка додавання початкових записів: " + ex.Message);
         }
 
-        clinic.Appointments.Book(
-    1,
-    1,
-    DateTime.Now.AddDays(1));
+    clinic.Appointments.Book(
+        1,
+        1,
+        DateTime.Now.AddDays(1));
+
+        clinic.Logger.LogInfo("Створено звичайний запис");
 
         clinic.Appointments.BookUrgent(
-            1,
-            1,
-            DateTime.Now.AddHours(2),
-            "Біль у грудях");
+        1,
+        1,
+        DateTime.Now.AddHours(2),
+        "Біль у грудях");
+
+        clinic.Logger.LogInfo("Створено терміновий запис");
 
         clinic.Appointments.BookSpecialist(
-            1,
-            1,
-            DateTime.Now.AddDays(2),
-            "Кардіологія");
+        1,
+        1,
+        DateTime.Now.AddDays(2),
+        "Кардіологія");
+
+        clinic.Logger.LogInfo("Створено запис до спеціаліста");
 
 
         while (true)
@@ -728,6 +745,7 @@ internal class Program
             Console.WriteLine("7. Звіт - загальна статистика");
             Console.WriteLine("8. Аналітика");
             Console.WriteLine("9. Плани лікування - рефлексія, атрибути");
+            Console.WriteLine("10. Файли");
             Console.WriteLine("0. Вихід");
 
             string choice = Console.ReadLine();
@@ -760,6 +778,9 @@ internal class Program
                     break;
                 case "9":
                     TreatmentPlansMenu(clinic);
+                    break;
+                case "10":
+                    FilesMenu(clinic);
                     break;
                 case "0":
                     return;
@@ -813,7 +834,23 @@ internal class Program
                     if (int.TryParse(Console.ReadLine(), out int appId))
                     {
                         bool success = clinic.Billing.PayAppointment(appId);
-                        Console.WriteLine(success ? "Успішно оплачено!" : "Не вдалося оплатити: запис не знайдено, вже оплачено або скасовано.");
+
+                        if (success)
+                        {
+                            clinic.Logger.LogInfo(
+                                "Оплачено запис #" + appId);
+
+                            Console.WriteLine("Успішно оплачено!");
+                        }
+                        else
+                        {
+                            clinic.Logger.LogWarning(
+                                "Не вдалося оплатити запис #" +
+                                appId);
+
+                            Console.WriteLine(
+                                "Не вдалося оплатити: запис не знайдено, вже оплачено або скасовано.");
+                        }
                     }
                     break;
 
@@ -920,7 +957,7 @@ internal class Program
                         string reason = Console.ReadLine();
 
                         int count = AppointmentManager.CancelAll(cancellables, reason);
-                        Console.WriteLine("Скасовано записів: " + count);
+                        clinic.Logger.LogInfo("Скасовано записів: " + count);
                     }
                     break;
 
@@ -1033,6 +1070,7 @@ internal class Program
 
                             Console.WriteLine(
                                 "Пацієнта додано до черги.");
+                            clinic.Logger.LogInfo("Додано до черги: " + patient.FullName);
                         }
                     }
                     break;
@@ -1048,9 +1086,11 @@ internal class Program
                             patient.FullName +
                             ". У черзі лишилось: " +
                             clinic.WaitingRoom.Count);
+                        clinic.Logger.LogInfo("Прийнято пацієнта з черги: " + patient.FullName);
                     }
                     catch (InvalidOperationException ex)
                     {
+                        clinic.Logger.LogWarning(ex.Message);
                         Console.WriteLine(ex.Message);
                     }
                     break;
@@ -1067,6 +1107,7 @@ internal class Program
                     }
                     catch (InvalidOperationException ex)
                     {
+                        clinic.Logger.LogWarning(ex.Message);
                         Console.WriteLine(ex.Message);
                     }
                     break;
@@ -1146,6 +1187,7 @@ internal class Program
                             FormBuilder.Build<TreatmentPlan>();
 
                         clinic.TreatmentPlans.Add(plan);
+                        clinic.Logger.LogInfo("Створено план лікування #" + plan.Id);
 
                         break;
                     }
@@ -1206,6 +1248,7 @@ internal class Program
                         else
                         {
                             Console.WriteLine("План активовано.");
+                            clinic.Logger.LogInfo("Активовано план лікування #" + plan.Id);
                         }
 
                         break;
@@ -1234,6 +1277,7 @@ internal class Program
                         else
                         {
                             Console.WriteLine("План завершено.");
+                            clinic.Logger.LogInfo("Завершено план лікування #" + plan.Id);
                         }
 
                         break;
@@ -1263,6 +1307,7 @@ internal class Program
                         else
                         {
                             Console.WriteLine("План скасовано.");
+                            clinic.Logger.LogInfo("Скасовано план лікування #" + plan.Id);
                         }
 
                         break;
@@ -1282,6 +1327,59 @@ internal class Program
                 default:
                     Console.WriteLine("Невірний вибір.");
                     break;
+            }
+        }
+    }
+
+    static void FilesMenu(Clinic clinic)
+    {
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("=== Файли ===");
+            Console.WriteLine("1. Останні рядки лога");
+            Console.WriteLine("2. Очистити лог");
+            Console.WriteLine("0. Назад");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    Console.Write("Скільки рядків показати: ");
+
+                    if (!int.TryParse(Console.ReadLine(), out int n))
+                    {
+                        clinic.Logger.LogWarning(
+                            "Некоректне число рядків для перегляду логу");
+
+                        Console.WriteLine("Некоректне число.");
+                        break;
+                    }
+
+                    string[] lines = clinic.Logger.GetLastLines(n);
+
+                    if (lines.Length == 0)
+                    {
+                        Console.WriteLine("Лог порожній.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < lines.Length; i++)
+                        {
+                            Console.WriteLine(lines[i]);
+                        }
+                    }
+
+                    break;
+
+                case "2":
+                    clinic.Logger.Clear();
+                    Console.WriteLine("Лог очищено.");
+                    break;
+
+                case "0":
+                    return;
             }
         }
     }
@@ -1315,8 +1413,13 @@ internal class Program
         {
             clinic.MedicalRecords.Add(new Diagnosis(1, 1, DateTime.Now, "M54", "Біль у спині", false));
             Console.WriteLine("Тестовий діагноз успішно додано!");
+            clinic.Logger.LogInfo("Додано діагноз");
         }
-        catch (Exception ex) { Console.WriteLine("Помилка: " + ex.Message); }
+        catch (Exception ex)
+        {
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка: " + ex.Message);
+        }
     }
 
     static void AddLabResultStub(Clinic clinic)
@@ -1325,8 +1428,13 @@ internal class Program
         {
             clinic.MedicalRecords.Add(new LabResult(1, 1, DateTime.Now, "Загальний аналіз крові", 5.0, "одиниць", "4-9", true));
             Console.WriteLine("Тестовий аналіз успішно додано!");
+            clinic.Logger.LogInfo("Додано результат аналізу");
         }
-        catch (Exception ex) { Console.WriteLine("Помилка: " + ex.Message); }
+        catch (Exception ex)
+        {
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка: " + ex.Message);
+        }
     }
 
     static void AddPrescriptionStub(Clinic clinic)
@@ -1335,8 +1443,13 @@ internal class Program
         {
             clinic.MedicalRecords.Add(new Prescription(1, 1, DateTime.Now, "Ібупрофен", "400мг", 3, "Приймати за потреби"));
             Console.WriteLine("Тестовий рецепт успішно додано!");
+            clinic.Logger.LogInfo("Додано рецепт");
         }
-        catch (Exception ex) { Console.WriteLine("Помилка: " + ex.Message); }
+        catch (Exception ex)
+        {
+            clinic.Logger.LogWarning(ex.Message);
+            Console.WriteLine("Помилка: " + ex.Message);
+        }
     }
 
     static void PatientsMenu(Clinic clinic)
