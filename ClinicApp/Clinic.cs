@@ -1,5 +1,6 @@
 ﻿using ClinicApp.Models;
 using ClinicApp.Managers;
+using ClinicApp.Utils;
 namespace ClinicApp;
 
 public class Clinic
@@ -24,6 +25,12 @@ public class Clinic
 
     public TreatmentPlanManager TreatmentPlans { get; }
 
+    public ClinicLogger Logger { get; }
+
+    public ClinicExporter Exporter { get; }
+
+    public SessionManager Session { get; }
+
     public Clinic(string name)
     {
         Name = name;
@@ -44,6 +51,12 @@ public class Clinic
         Analytics = new AnalyticsManager(Appointments, Doctors, Patients);
 
         TreatmentPlans = new TreatmentPlanManager();
+
+        Logger = new ClinicLogger();
+
+        Exporter = new ClinicExporter(this);
+
+        Session = new SessionManager();
     }
 
     public void PrintSchedule(DateTime date)
