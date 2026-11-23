@@ -1339,6 +1339,7 @@ internal class Program
             Console.WriteLine("=== Файли ===");
             Console.WriteLine("1. Останні рядки лога");
             Console.WriteLine("2. Очистити лог");
+            Console.WriteLine("3. Експортувати всі звіти");
             Console.WriteLine("0. Назад");
 
             string choice = Console.ReadLine();
@@ -1376,6 +1377,21 @@ internal class Program
                 case "2":
                     clinic.Logger.Clear();
                     Console.WriteLine("Лог очищено.");
+                    break;
+
+                case "3":
+
+                    string[] files =
+                        clinic.Exporter.ExportAll();
+
+                    Console.WriteLine(
+                        "Створені файли:");
+
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        Console.WriteLine(files[i]);
+                    }
+
                     break;
 
                 case "0":
