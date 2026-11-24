@@ -652,11 +652,20 @@ using ClinicApp.Utils;
 using System.Globalization;
 using ClinicApp.Interfaces;
 using ClinicApp.Comparators;
+using ClinicApp.Events;
 
 namespace ClinicApp;
 
 internal class Program
 {
+    private static void OnAppointmentBookedConsole(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        Console.WriteLine(
+            $"[EVENT] Запис #{e.AppointmentId} створено: пацієнт #{e.PatientId} -> лікар #{e.DoctorId}");
+    }
+
     static void Main(string[] args)
     {
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -664,6 +673,8 @@ internal class Program
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
         Clinic clinic = new Clinic("Медична клініка");
+
+        clinic.Appointments.AppointmentBooked += OnAppointmentBookedConsole;
 
         try
         {
@@ -713,7 +724,6 @@ internal class Program
         1,
         DateTime.Now.AddDays(1));
 
-        clinic.Logger.LogInfo("Створено звичайний запис");
 
         clinic.Appointments.BookUrgent(
         1,
@@ -721,7 +731,6 @@ internal class Program
         DateTime.Now.AddHours(2),
         "Біль у грудях");
 
-        clinic.Logger.LogInfo("Створено терміновий запис");
 
         clinic.Appointments.BookSpecialist(
         1,
@@ -729,7 +738,6 @@ internal class Program
         DateTime.Now.AddDays(2),
         "Кардіологія");
 
-        clinic.Logger.LogInfo("Створено запис до спеціаліста");
 
         if (clinic.Session.Exists())
         {
