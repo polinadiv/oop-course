@@ -294,16 +294,22 @@ public class AppointmentManager
             return false;
         }
 
-        AppointmentCompleted?.Invoke(
-    this,
-   new AppointmentEventArgs(
-    appointment.Id,
-    appointment.PatientId,
-    appointment.DoctorId,
-    appointment.ScheduledAt,
-    appointment.Notes));
+        bool success =
+            appointment.Complete();
 
-        return appointment.Complete();
+        if (success)
+        {
+            AppointmentCompleted?.Invoke(
+                this,
+                new AppointmentEventArgs(
+                    appointment.Id,
+                    appointment.PatientId,
+                    appointment.DoctorId,
+                    appointment.ScheduledAt,
+                    appointment.Notes));
+        }
+
+        return success;
     }
 
     public Appointment[] GetAll()
