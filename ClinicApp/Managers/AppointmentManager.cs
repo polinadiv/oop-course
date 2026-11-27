@@ -11,6 +11,9 @@ public class AppointmentManager
     private int _count;
 
     public event EventHandler<AppointmentEventArgs>? AppointmentBooked;
+    public event EventHandler<AppointmentEventArgs>? AppointmentCancelled;
+    public event EventHandler<AppointmentEventArgs>? AppointmentCompleted;
+    public event EventHandler<AppointmentEventArgs>? UrgentAppointmentBooked;
 
     private PatientManager _patients;
     private DoctorManager _doctors;
@@ -188,6 +191,15 @@ public class AppointmentManager
          appointment.ScheduledAt,
          appointment.Notes));
 
+        UrgentAppointmentBooked?.Invoke(
+      this,
+      new AppointmentEventArgs(
+        appointment.Id,
+        appointment.PatientId,
+        appointment.DoctorId,
+        appointment.ScheduledAt,
+        appointment.Notes));
+
         Console.WriteLine(
             "Запис [" +
             appointment.Id +
@@ -282,6 +294,15 @@ public class AppointmentManager
             return false;
         }
 
+        AppointmentCompleted?.Invoke(
+    this,
+   new AppointmentEventArgs(
+    appointment.Id,
+    appointment.PatientId,
+    appointment.DoctorId,
+    appointment.ScheduledAt,
+    appointment.Notes));
+
         return appointment.Complete();
     }
 
@@ -298,7 +319,7 @@ public class AppointmentManager
         return result;
     }
 
-    public static int CancelAll(ICancellable[] items, string reason = "")
+    public int CancelAll(ICancellable[] items, string reason = "")
     {
         int cancelled = 0;
 
@@ -307,6 +328,15 @@ public class AppointmentManager
             if (items[i].Cancel(reason))
             {
                 cancelled++;
+
+                AppointmentCancelled?.Invoke(
+                    this,
+                    new AppointmentEventArgs(
+                        ((Appointment)items[i]).Id,
+                        ((Appointment)items[i]).PatientId,
+                        ((Appointment)items[i]).DoctorId,
+                        ((Appointment)items[i]).ScheduledAt,
+                        ((Appointment)items[i]).Notes));
             }
         }
 

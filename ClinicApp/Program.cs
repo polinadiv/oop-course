@@ -680,7 +680,6 @@ internal class Program
         {
             clinic.Patients.Add(
                 new Patient("Іван", "Петренко", new DateTime(1985, 5, 10), BloodType.APositive, "0501111111"));
-            clinic.Logger.LogInfo("Додано пацієнта: Іван Петренко");
         }
         catch (Exception ex)
         {
@@ -865,9 +864,6 @@ internal class Program
 
                         if (success)
                         {
-                            clinic.Logger.LogInfo(
-                                "Оплачено запис #" + appId);
-
                             Console.WriteLine("Успішно оплачено!");
                         }
                         else
@@ -984,8 +980,7 @@ internal class Program
                         Console.Write("Причина скасування: ");
                         string reason = Console.ReadLine();
 
-                        int count = AppointmentManager.CancelAll(cancellables, reason);
-                        clinic.Logger.LogInfo("Скасовано записів: " + count);
+                        int count = clinic.Appointments.CancelAll(cancellables, reason);
                     }
                     break;
 
@@ -1215,7 +1210,6 @@ internal class Program
                             FormBuilder.Build<TreatmentPlan>();
 
                         clinic.TreatmentPlans.Add(plan);
-                        clinic.Logger.LogInfo("Створено план лікування #" + plan.Id);
 
                         break;
                     }
@@ -1298,14 +1292,13 @@ internal class Program
                         {
                             Console.WriteLine("План не знайдено.");
                         }
-                        else if (!plan.Complete())
+                        else if (!clinic.TreatmentPlans.Complete(id))
                         {
                             Console.WriteLine("Неможливо завершити план.");
                         }
                         else
                         {
                             Console.WriteLine("План завершено.");
-                            clinic.Logger.LogInfo("Завершено план лікування #" + plan.Id);
                         }
 
                         break;

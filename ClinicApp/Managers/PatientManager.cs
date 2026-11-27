@@ -1,6 +1,7 @@
 ﻿using ClinicApp.Models;
 using ClinicApp.Enums;
 using System.Collections.Generic;
+using ClinicApp.Events;
 namespace ClinicApp.Managers;
 
 
@@ -27,6 +28,8 @@ public class PatientManager
         }
     }
 
+    public event EventHandler<PatientEventArgs>? PatientAdded;
+
     public PatientManager()
     {
         _patients = new List<Patient>();
@@ -39,6 +42,11 @@ public class PatientManager
         Console.WriteLine("Пацієнта " +
                           patient.FullName +
                           " додано.");
+        PatientAdded?.Invoke(
+       this,
+       new PatientEventArgs(
+        patient.Id,
+        patient.FullName));
     }
 
     public Patient? FindById(int id)
