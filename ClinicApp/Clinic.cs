@@ -47,7 +47,17 @@ public class Clinic
         Billing.PaymentReceived += Logger.OnPaymentReceived;
 
         TreatmentPlans.PlanCompleted += Logger.OnPlanCompleted;
+
+        Patients.PatientAdded += Passport.OnPatientAdded;
+
+        Appointments.AppointmentCompleted +=
+            Passport.OnAppointmentCompleted;
+
+        TreatmentPlans.PlanCompleted +=
+            Passport.OnPlanCompleted;
     }
+
+    public PatientPassportWriter Passport { get; }
 
     public Clinic(string name)
     {
@@ -75,6 +85,8 @@ public class Clinic
         Exporter = new ClinicExporter(this);
 
         Session = new SessionManager();
+
+        Passport = new PatientPassportWriter(this);
 
         SubscribeEvents();
     }
