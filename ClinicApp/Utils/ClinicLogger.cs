@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using ClinicApp.Events;
 
 namespace ClinicApp.Utils;
 
@@ -78,5 +79,84 @@ public class ClinicLogger
     public bool Exists()
     {
         return File.Exists(_logPath);
+    }
+
+    public void OnPatientAdded(
+    object? sender,
+    PatientEventArgs e)
+    {
+        LogInfo(
+            "Новий пацієнт: " +
+            e.FullName +
+            " (ID=" +
+            e.PatientId +
+            ")");
+    }
+
+    public void OnPaymentReceived(
+    object? sender,
+    PaymentEventArgs e)
+    {
+        LogInfo(
+            "Оплата запису #" +
+            e.AppointmentId +
+            ", сума " +
+            e.Amount.ToString("F2"));
+    }
+
+    public void OnPlanCompleted(
+    object? sender,
+    TreatmentPlanEventArgs e)
+    {
+        LogInfo(
+            "Завершено план #" +
+            e.PlanId);
+    }
+
+    public void OnAppointmentCancelled(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        LogInfo(
+            "Скасовано запис #" +
+            e.AppointmentId);
+    }
+
+    public void OnAppointmentCompleted(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        LogInfo(
+            "Завершено запис #" +
+            e.AppointmentId);
+    }
+
+    public void OnUrgentAppointmentBooked(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        LogWarning(
+            "ТЕРМІНОВИЙ запис #" +
+            e.AppointmentId);
+
+        Directory.CreateDirectory("alerts");
+
+        string filePath =
+            Path.Combine(
+                "alerts",
+                $"urgent_{DateTime.Now:yyyy-MM-dd}.txt");
+
+        File.AppendAllText(
+            filePath,
+            $"Запис #{e.AppointmentId}{Environment.NewLine}");
+    }
+
+    public void OnAppointmentBooked(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        LogInfo(
+            "Створено запис #" +
+            e.AppointmentId);
     }
 }

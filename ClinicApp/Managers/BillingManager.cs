@@ -1,5 +1,6 @@
 ﻿using ClinicApp.Interfaces;
 using ClinicApp.Models;
+using ClinicApp.Events;
 
 namespace ClinicApp.Managers;
 
@@ -11,6 +12,8 @@ public class BillingManager
     {
         _appointments = appointments;
     }
+
+    public event EventHandler<PaymentEventArgs>? PaymentReceived;
 
     private IPayable[] GetUnpaid(
         Appointment[] source)
@@ -112,6 +115,12 @@ public class BillingManager
                 }
 
                 items[i].MarkPaid();
+
+                PaymentReceived?.Invoke(
+                 this,
+                 new PaymentEventArgs(
+                 items[i].Id,
+                 items[i].GetCost()));
 
                 return true;
             }

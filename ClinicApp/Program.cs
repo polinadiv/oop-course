@@ -652,11 +652,20 @@ using ClinicApp.Utils;
 using System.Globalization;
 using ClinicApp.Interfaces;
 using ClinicApp.Comparators;
+using ClinicApp.Events;
 
 namespace ClinicApp;
 
 internal class Program
 {
+    private static void OnAppointmentBookedConsole(
+    object? sender,
+    AppointmentEventArgs e)
+    {
+        Console.WriteLine(
+            $"[EVENT] Запис #{e.AppointmentId} створено: пацієнт #{e.PatientId} -> лікар #{e.DoctorId}");
+    }
+
     static void Main(string[] args)
     {
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -665,11 +674,12 @@ internal class Program
 
         Clinic clinic = new Clinic("Медична клініка");
 
+        clinic.Appointments.AppointmentBooked += OnAppointmentBookedConsole;
+
         try
         {
             clinic.Patients.Add(
                 new Patient("Іван", "Петренко", new DateTime(1985, 5, 10), BloodType.APositive, "0501111111"));
-            clinic.Logger.LogInfo("Додано пацієнта: Іван Петренко");
         }
         catch (Exception ex)
         {
@@ -713,7 +723,6 @@ internal class Program
         1,
         DateTime.Now.AddDays(1));
 
-        clinic.Logger.LogInfo("Створено звичайний запис");
 
         clinic.Appointments.BookUrgent(
         1,
@@ -721,7 +730,6 @@ internal class Program
         DateTime.Now.AddHours(2),
         "Біль у грудях");
 
-        clinic.Logger.LogInfo("Створено терміновий запис");
 
         clinic.Appointments.BookSpecialist(
         1,
@@ -729,7 +737,6 @@ internal class Program
         DateTime.Now.AddDays(2),
         "Кардіологія");
 
-        clinic.Logger.LogInfo("Створено запис до спеціаліста");
 
         if (clinic.Session.Exists())
         {
@@ -803,7 +810,11 @@ internal class Program
                         Console.WriteLine("Сесію збережено.");
                     }
 
+                    clinic.Tracker.PrintSummary();
+                    clinic.Tracker.SaveSummary();
+
                     return;
+
                 default:
                     Console.WriteLine("Невірний вибір.");
                     break;
@@ -857,9 +868,6 @@ internal class Program
 
                         if (success)
                         {
-                            clinic.Logger.LogInfo(
-                                "Оплачено запис #" + appId);
-
                             Console.WriteLine("Успішно оплачено!");
                         }
                         else
@@ -976,8 +984,7 @@ internal class Program
                         Console.Write("Причина скасування: ");
                         string reason = Console.ReadLine();
 
-                        int count = AppointmentManager.CancelAll(cancellables, reason);
-                        clinic.Logger.LogInfo("Скасовано записів: " + count);
+                        int count = clinic.Appointments.CancelAll(cancellables, reason);
                     }
                     break;
 
@@ -1207,7 +1214,6 @@ internal class Program
                             FormBuilder.Build<TreatmentPlan>();
 
                         clinic.TreatmentPlans.Add(plan);
-                        clinic.Logger.LogInfo("Створено план лікування #" + plan.Id);
 
                         break;
                     }
@@ -1290,14 +1296,13 @@ internal class Program
                         {
                             Console.WriteLine("План не знайдено.");
                         }
-                        else if (!plan.Complete())
+                        else if (!clinic.TreatmentPlans.Complete(id))
                         {
                             Console.WriteLine("Неможливо завершити план.");
                         }
                         else
                         {
                             Console.WriteLine("План завершено.");
-                            clinic.Logger.LogInfo("Завершено план лікування #" + plan.Id);
                         }
 
                         break;
