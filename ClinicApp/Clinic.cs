@@ -55,9 +55,32 @@ public class Clinic
 
         TreatmentPlans.PlanCompleted +=
             Passport.OnPlanCompleted;
+
+        Patients.PatientAdded +=
+    Tracker.OnPatientAdded;
+
+        Appointments.AppointmentBooked +=
+            Tracker.OnAppointmentBooked;
+
+        Appointments.UrgentAppointmentBooked +=
+            Tracker.OnUrgentAppointmentBooked;
+
+        Appointments.AppointmentCancelled +=
+            Tracker.OnAppointmentCancelled;
+
+        Appointments.AppointmentCompleted +=
+            Tracker.OnAppointmentCompleted;
+
+        Billing.PaymentReceived +=
+            Tracker.OnPaymentReceived;
+
+        TreatmentPlans.PlanCompleted +=
+            Tracker.OnPlanCompleted;
     }
 
     public PatientPassportWriter Passport { get; }
+
+    public SessionEventTracker Tracker { get; }
 
     public Clinic(string name)
     {
@@ -87,6 +110,8 @@ public class Clinic
         Session = new SessionManager();
 
         Passport = new PatientPassportWriter(this);
+
+        Tracker = new SessionEventTracker(this);
 
         SubscribeEvents();
     }

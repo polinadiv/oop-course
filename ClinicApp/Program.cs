@@ -810,7 +810,11 @@ internal class Program
                         Console.WriteLine("Сесію збережено.");
                     }
 
+                    clinic.Tracker.PrintSummary();
+                    clinic.Tracker.SaveSummary();
+
                     return;
+
                 default:
                     Console.WriteLine("Невірний вибір.");
                     break;
